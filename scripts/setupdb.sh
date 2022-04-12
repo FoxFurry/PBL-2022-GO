@@ -13,6 +13,6 @@ failure() {
 }
 trap 'failure ${LINENO} "$BASH_COMMAND"' ERR
 
-mysql -u root -e "CREATE USER '${DATABASE_USER}'@'localhost' IDENTIFIED BY '${DATABASE_PASSWORD}';"
+mysql -u root -e "CREATE USER IF NOT EXISTS '${DATABASE_USER}'@'localhost' IDENTIFIED BY '${DATABASE_PASSWORD}';"
 mysql -u root -e "GRANT ALL PRIVILEGES ON *.* TO '${DATABASE_USER}'@'localhost';"
 mysql -u root -e "CREATE DATABASE petfeederdb";

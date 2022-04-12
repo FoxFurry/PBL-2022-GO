@@ -5,9 +5,10 @@ Copyright © 2022 NAME HERE <EMAIL ADDRESS>
 package cmd
 
 import (
-	"fmt"
-
+	"github.com/FoxFurry/petfeedergateway/internal/server"
+	"github.com/FoxFurry/petfeedergateway/internal/store"
 	"github.com/spf13/cobra"
+	"log"
 )
 
 // serveCmd represents the serve command
@@ -21,7 +22,13 @@ Cobra is a CLI library for Go that empowers applications.
 This application is a tool to generate the needed files
 to quickly create a Cobra application.`,
 	Run: func(cmd *cobra.Command, args []string) {
-		fmt.Println("serve called")
+		db := store.CreateDB()
+		feeder, err := server.New(db)
+		if err != nil {
+			log.Fatalf("failed to create a pet feeder server: %v", err)
+		}
+
+		feeder.Run()
 	},
 }
 
