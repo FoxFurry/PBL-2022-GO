@@ -13,7 +13,7 @@ import (
 type Service interface {
 	CreateNewUser(ctx context.Context, u models.User) (*models.User, error)
 	GetUserByMail(ctx context.Context, mail string) (*models.User, error)
-	AuthenticateUser(ctx context.Context, u models.User) (string, error)
+	AuthenticateUser(ctx context.Context, u models.User) (*models.User, error)
 }
 
 type service struct {

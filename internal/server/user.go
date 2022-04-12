@@ -4,7 +4,9 @@ import (
 	"github.com/FoxFurry/petfeedergateway/internal/httperr"
 	"github.com/FoxFurry/petfeedergateway/internal/models"
 	"github.com/gin-gonic/gin"
+	"github.com/golang-jwt/jwt"
 	"net/http"
+	"time"
 )
 
 func (p *PetFeeder) CreateNewUser(c *gin.Context) {
@@ -51,5 +53,41 @@ func (p *PetFeeder) GetUserByMail(c *gin.Context) {
 		return
 	}
 
-	c.JSON(200, responseUser)
+	c.JSON(http.StatusOK, responseUser)
+}
+
+func (p *PetFeeder) LoginUser(c *gin.Context) {
+	var u models.User
+
+	if err := c.ShouldBindJSON(&u); err != nil {
+		httperr.Handle(c, httperr.New(err.Error(), http.StatusBadRequest))
+		return
+	}
+
+	if err := u.ValidateMail(); err != nil {
+		httperr.Handle(c, err)
+		return
+	}
+
+	responseUser, err := p.service.AuthenticateUser(c, u)
+	if err != nil {
+		httperr.Handle(c, err)
+		return
+	}
+
+	token := jwt.NewWithClaims(jwt.SigningMethodHS256, jwt.MapClaims{
+		"uuid": responseUser.UUID,
+		"exp":  time.Now().Add(time.Hour).Unix(),
+		"iss":  "petfeeder",
+	})
+
+	tokenString, err := token.SignedString([]byte("secret"))
+	if err != nil {
+		httperr.Handle(c, httperr.WrapHttp(err, "could not sign token", http.StatusInternalServerError))
+		return
+	}
+
+	c.JSON(http.StatusOK, gin.H{
+		"token": tokenString,
+	})
 }

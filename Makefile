@@ -9,3 +9,6 @@ test:
 
 migrate:
 	./migrations/migrate.sh
+
+totallines:
+	find . -name '*.go' | xargs wc -l

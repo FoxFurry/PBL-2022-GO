@@ -25,6 +25,7 @@ func New(datastore store.DB) (*PetFeeder, error) {
 		{
 			user.POST("/create", p.CreateNewUser)   // /v1/user/create
 			user.GET("/getbymail", p.GetUserByMail) // /v1/user/getbymail
+			user.POST("/login", p.LoginUser)        // /v1/user/login
 		}
 	}
 
