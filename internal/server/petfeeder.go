@@ -3,12 +3,14 @@ package server
 import (
 	"github.com/FoxFurry/petfeedergateway/internal/service"
 	"github.com/FoxFurry/petfeedergateway/internal/store"
+	"github.com/FoxFurry/petfeedergateway/internal/util"
 	"github.com/gin-gonic/gin"
 )
 
 type PetFeeder struct {
 	service service.Service
 	gEng    *gin.Engine
+	jwt     util.JWTProvider
 }
 
 func New(datastore store.DB) (*PetFeeder, error) {
@@ -17,6 +19,7 @@ func New(datastore store.DB) (*PetFeeder, error) {
 	p := PetFeeder{
 		service: service.New(datastore),
 		gEng:    ginEngine,
+		jwt:     util.NewJWT(),
 	}
 
 	v1 := ginEngine.Group("/v1")
@@ -26,6 +29,11 @@ func New(datastore store.DB) (*PetFeeder, error) {
 			user.POST("/create", p.CreateNewUser)   // /v1/user/create
 			user.GET("/getbymail", p.GetUserByMail) // /v1/user/getbymail
 			user.POST("/login", p.LoginUser)        // /v1/user/login
+		}
+
+		device := v1.Group("/device")
+		{
+			device.POST("/register") // /v1/device/register
 		}
 	}
 

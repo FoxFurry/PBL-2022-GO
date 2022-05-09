@@ -9,6 +9,10 @@ import (
 	"time"
 )
 
+const (
+	tokenIssuer = "petfeeder_dev"
+)
+
 func (p *PetFeeder) CreateNewUser(c *gin.Context) {
 	var u models.User
 
@@ -78,7 +82,7 @@ func (p *PetFeeder) LoginUser(c *gin.Context) {
 	token := jwt.NewWithClaims(jwt.SigningMethodHS256, jwt.MapClaims{
 		"uuid": responseUser.UUID,
 		"exp":  time.Now().Add(time.Hour).Unix(),
-		"iss":  "petfeeder",
+		"iss":  tokenIssuer,
 	})
 
 	tokenString, err := token.SignedString([]byte("secret"))

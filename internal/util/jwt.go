@@ -7,14 +7,18 @@ import (
 )
 
 type JWTProvider interface {
-	CreateSignedToken(UUID string, expDate int64, issuer, key string) (string, error)
-	ValidateToken(token, issuer, key string) (string, error)
+	CreateSignedToken(UUID string, expDate int64, issuer string, key []byte) (string, error)
+	ValidateToken(token, issuer string, key []byte) (string, error)
 }
 
 type jwtprovider struct {
 }
 
-func (j *jwtprovider) CreateSignedToken(UUID string, expDate int64, issuer, key []byte) (string, error) {
+func NewJWT() JWTProvider {
+	return &jwtprovider{}
+}
+
+func (j *jwtprovider) CreateSignedToken(UUID string, expDate int64, issuer string, key []byte) (string, error) {
 	claims := jwt.MapClaims{
 		"uuid": UUID,
 		"exp":  expDate,
