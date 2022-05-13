@@ -2,10 +2,11 @@ package models
 
 import (
 	"fmt"
-	"github.com/FoxFurry/petfeedergateway/internal/httperr"
 	"net/http"
 	"net/mail"
 	"unicode"
+
+	"github.com/FoxFurry/PBL-2022-GO/internal/httperr"
 )
 
 type User struct {

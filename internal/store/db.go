@@ -3,11 +3,12 @@ package store
 import (
 	"context"
 	"fmt"
-	"github.com/FoxFurry/petfeedergateway/internal/models"
+	"log"
+
+	"github.com/FoxFurry/PBL-2022-GO/internal/models"
 	"github.com/go-sql-driver/mysql"
 	"github.com/jmoiron/sqlx"
 	"github.com/spf13/viper"
-	"log"
 )
 
 type DB interface {

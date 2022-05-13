@@ -1,12 +1,13 @@
 package server
 
 import (
-	"github.com/FoxFurry/petfeedergateway/internal/httperr"
-	"github.com/FoxFurry/petfeedergateway/internal/models"
-	"github.com/gin-gonic/gin"
-	"github.com/golang-jwt/jwt"
 	"net/http"
 	"time"
+
+	"github.com/FoxFurry/PBL-2022-GO/internal/httperr"
+	"github.com/FoxFurry/PBL-2022-GO/internal/models"
+	"github.com/gin-gonic/gin"
+	"github.com/golang-jwt/jwt"
 )
 
 const (

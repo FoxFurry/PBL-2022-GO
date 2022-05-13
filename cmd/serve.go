@@ -5,10 +5,11 @@ Copyright © 2022 NAME HERE <EMAIL ADDRESS>
 package cmd
 
 import (
-	"github.com/FoxFurry/petfeedergateway/internal/server"
-	"github.com/FoxFurry/petfeedergateway/internal/store"
-	"github.com/spf13/cobra"
 	"log"
+
+	"github.com/FoxFurry/PBL-2022-GO/internal/server"
+	"github.com/FoxFurry/PBL-2022-GO/internal/store"
+	"github.com/spf13/cobra"
 )
 
 // serveCmd represents the serve command

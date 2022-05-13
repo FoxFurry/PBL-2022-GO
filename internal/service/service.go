@@ -3,11 +3,12 @@ package service
 import (
 	"context"
 	"fmt"
-	"github.com/FoxFurry/petfeedergateway/internal/httperr"
-	"github.com/FoxFurry/petfeedergateway/internal/models"
-	"github.com/FoxFurry/petfeedergateway/internal/store"
-	"github.com/go-sql-driver/mysql"
 	"net/http"
+
+	"github.com/FoxFurry/PBL-2022-GO/internal/httperr"
+	"github.com/FoxFurry/PBL-2022-GO/internal/models"
+	"github.com/FoxFurry/PBL-2022-GO/internal/store"
+	"github.com/go-sql-driver/mysql"
 )
 
 type Service interface {

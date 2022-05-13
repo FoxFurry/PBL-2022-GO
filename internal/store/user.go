@@ -2,7 +2,8 @@ package store
 
 import (
 	"context"
-	"github.com/FoxFurry/petfeedergateway/internal/models"
+
+	"github.com/FoxFurry/PBL-2022-GO/internal/models"
 )
 
 func (d *db) CreateNewUser(ctx context.Context, user models.User) error {

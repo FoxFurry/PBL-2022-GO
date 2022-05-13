@@ -1,9 +1,9 @@
 package server
 
 import (
-	"github.com/FoxFurry/petfeedergateway/internal/service"
-	"github.com/FoxFurry/petfeedergateway/internal/store"
-	"github.com/FoxFurry/petfeedergateway/internal/util"
+	"github.com/FoxFurry/PBL-2022-GO/internal/service"
+	"github.com/FoxFurry/PBL-2022-GO/internal/store"
+	"github.com/FoxFurry/PBL-2022-GO/internal/util"
 	"github.com/gin-gonic/gin"
 )
 

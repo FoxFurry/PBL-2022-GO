@@ -2,12 +2,13 @@ package service
 
 import (
 	"context"
-	"github.com/FoxFurry/petfeedergateway/internal/httperr"
-	"github.com/FoxFurry/petfeedergateway/internal/models"
-	"github.com/cespare/xxhash"
-	"github.com/google/uuid"
 	"net/http"
 	"strconv"
+
+	"github.com/FoxFurry/PBL-2022-GO/internal/httperr"
+	"github.com/FoxFurry/PBL-2022-GO/internal/models"
+	"github.com/cespare/xxhash"
+	"github.com/google/uuid"
 )
 
 func (p *service) CreateNewUser(ctx context.Context, u models.User) (*models.User, error) {
