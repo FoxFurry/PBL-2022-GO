@@ -13,7 +13,7 @@ failure() {
 }
 trap 'failure ${LINENO} "$BASH_COMMAND"' ERR
 
-MIGRATIONS="./*-up.sql"
+MIGRATIONS="./*.up.sql"
 for f in ${MIGRATIONS}
 do
   if test -f "${f}"; then
