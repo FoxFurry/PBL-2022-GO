@@ -4,6 +4,7 @@ import (
 	"net/http"
 
 	"github.com/FoxFurry/PBL-2022-GO/internal/httperr"
+	"github.com/FoxFurry/PBL-2022-GO/internal/models"
 	"github.com/FoxFurry/PBL-2022-GO/internal/service"
 	"github.com/FoxFurry/PBL-2022-GO/internal/store"
 	"github.com/FoxFurry/PBL-2022-GO/internal/util"
@@ -89,4 +90,18 @@ func (p *PetFeeder) corsMiddleware(c *gin.Context) {
 	}
 
 	c.Next()
+}
+
+func (p *PetFeeder) getUserFromContext(c *gin.Context) (*models.User, error) {
+	userUUID := c.GetString(uuidKey)
+	if userUUID == "" {
+		return nil, httperr.New("user uuid missing from context", http.StatusBadRequest)
+	}
+
+	user, err := p.service.GetUserByUUID(c, userUUID)
+	if err != nil {
+		return nil, httperr.Wrap(err, "could not get user from the context")
+	}
+
+	return user, nil
 }

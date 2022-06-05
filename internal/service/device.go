@@ -5,9 +5,12 @@ import (
 	"fmt"
 
 	"github.com/FoxFurry/PBL-2022-GO/internal/models"
+	"github.com/google/uuid"
 )
 
 func (p *service) RegisterDevice(ctx context.Context, device models.Device) (*models.Device, error) {
+	device.UUID = uuid.New().String()
+
 	err := p.db.CreateDevice(ctx, device)
 	if err != nil {
 		return nil, handleDBError(err, "could not create device")

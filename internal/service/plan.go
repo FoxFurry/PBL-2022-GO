@@ -5,9 +5,12 @@ import (
 	"fmt"
 
 	"github.com/FoxFurry/PBL-2022-GO/internal/models"
+	"github.com/google/uuid"
 )
 
 func (p *service) CreatePlan(ctx context.Context, plan models.Plan) (*models.Plan, error) {
+	plan.UUID = uuid.New().String()
+
 	if err := p.db.CreatePlan(ctx, plan); err != nil {
 		return nil, handleDBError(err, "could not get plan")
 	}

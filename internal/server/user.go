@@ -35,28 +35,6 @@ func (p *PetFeeder) RegisterUser(c *gin.Context) {
 	})
 }
 
-func (p *PetFeeder) GetUserByMail(c *gin.Context) {
-	var u models.User
-
-	if err := c.ShouldBindJSON(&u); err != nil {
-		httperr.Handle(c, httperr.New(err.Error(), http.StatusBadRequest))
-		return
-	}
-
-	if err := u.ValidateMail(); err != nil {
-		httperr.Handle(c, err)
-		return
-	}
-
-	responseUser, err := p.service.GetUserByMail(c, u.Mail)
-	if err != nil {
-		httperr.Handle(c, err)
-		return
-	}
-
-	c.JSON(http.StatusOK, responseUser)
-}
-
 func (p *PetFeeder) LoginUser(c *gin.Context) {
 	var u models.User
 
@@ -91,4 +69,26 @@ func (p *PetFeeder) LoginUser(c *gin.Context) {
 	c.JSON(http.StatusOK, gin.H{
 		"token": tokenString,
 	})
+}
+
+func (p *PetFeeder) GetUserByMail(c *gin.Context) {
+	var u models.User
+
+	if err := c.ShouldBindJSON(&u); err != nil {
+		httperr.Handle(c, httperr.New(err.Error(), http.StatusBadRequest))
+		return
+	}
+
+	if err := u.ValidateMail(); err != nil {
+		httperr.Handle(c, err)
+		return
+	}
+
+	responseUser, err := p.service.GetUserByMail(c, u.Mail)
+	if err != nil {
+		httperr.Handle(c, err)
+		return
+	}
+
+	c.JSON(http.StatusOK, responseUser)
 }

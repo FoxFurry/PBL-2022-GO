@@ -5,9 +5,12 @@ import (
 	"fmt"
 
 	"github.com/FoxFurry/PBL-2022-GO/internal/models"
+	"github.com/google/uuid"
 )
 
 func (p *service) RegisterPet(ctx context.Context, pet models.Pet) (*models.Pet, error) {
+	pet.UUID = uuid.New().String()
+
 	if err := p.db.CreatePet(ctx, pet); err != nil {
 		return nil, handleDBError(err, "could not create pet")
 	}

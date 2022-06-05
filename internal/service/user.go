@@ -32,6 +32,15 @@ func (p *service) GetUserByMail(ctx context.Context, mail string) (*models.User,
 	return user, nil
 }
 
+func (p *service) GetUserByUUID(ctx context.Context, userUUID string) (*models.User, error) {
+	user, err := p.db.GetUserByUUID(ctx, userUUID)
+	if err != nil {
+		return nil, handleDBError(err, "could not get user by uuid")
+	}
+
+	return user, nil
+}
+
 func (p *service) AuthenticateUser(ctx context.Context, u models.User) (*models.User, error) {
 	user, err := p.db.GetUserByMail(ctx, u.Mail)
 	if err != nil {
