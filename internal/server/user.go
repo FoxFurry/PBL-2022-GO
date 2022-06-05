@@ -10,11 +10,7 @@ import (
 	"github.com/golang-jwt/jwt"
 )
 
-const (
-	tokenIssuer = "petfeeder_dev"
-)
-
-func (p *PetFeeder) CreateNewUser(c *gin.Context) {
+func (p *PetFeeder) RegisterUser(c *gin.Context) {
 	var u models.User
 
 	if err := c.ShouldBindJSON(&u); err != nil {
@@ -86,7 +82,7 @@ func (p *PetFeeder) LoginUser(c *gin.Context) {
 		"iss":  tokenIssuer,
 	})
 
-	tokenString, err := token.SignedString([]byte("secret"))
+	tokenString, err := token.SignedString([]byte(tokenSecret))
 	if err != nil {
 		httperr.Handle(c, httperr.WrapHttp(err, "could not sign token", http.StatusInternalServerError))
 		return

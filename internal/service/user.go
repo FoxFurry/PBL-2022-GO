@@ -15,8 +15,7 @@ func (p *service) CreateNewUser(ctx context.Context, u models.User) (*models.Use
 	u.Password = strconv.FormatUint(xxhash.Sum64String(u.Password), 10)
 	u.UUID = uuid.New().String()
 
-	err := p.db.CreateNewUser(ctx, u)
-
+	err := p.db.CreateUser(ctx, u)
 	if err != nil {
 		return nil, handleDBError(err, "could not create user")
 	}

@@ -12,8 +12,32 @@ import (
 )
 
 type DB interface {
-	CreateNewUser(ctx context.Context, u models.User) error
+	// User
+
+	CreateUser(ctx context.Context, user models.User) error
 	GetUserByMail(ctx context.Context, mail string) (*models.User, error)
+	GetUserByUUID(ctx context.Context, userUUID string) (*models.User, error)
+
+	// Device
+
+	CreateDevice(ctx context.Context, device models.Device) error
+	DeleteDevice(ctx context.Context, deviceUUID string) error
+	GetDevicesByOwnerID(ctx context.Context, ownerID uint64) ([]models.Device, error)
+	GetDeviceByUUID(ctx context.Context, deviceUUID string) (*models.Device, error)
+
+	// Pet
+
+	CreatePet(ctx context.Context, pet models.Pet) error
+	DeletePet(ctx context.Context, petUUID string) error
+	GetPetsByOwnerID(ctx context.Context, ownerID uint64) ([]models.Pet, error)
+	GetPetByUUID(ctx context.Context, petUUID string) (*models.Pet, error)
+
+	// Plan
+
+	CreatePlan(ctx context.Context, plan models.Plan) error
+	DeletePlan(ctx context.Context, planUUID string) error
+	GetAllPlansByOwnerID(ctx context.Context, ownerID uint64) ([]models.Plan, error)
+	GetPlanByUUID(ctx context.Context, planUUID string) (*models.Plan, error)
 }
 
 type db struct {

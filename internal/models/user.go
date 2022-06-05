@@ -4,16 +4,20 @@ import (
 	"fmt"
 	"net/http"
 	"net/mail"
+	"time"
 	"unicode"
 
 	"github.com/FoxFurry/PBL-2022-GO/internal/httperr"
 )
 
 type User struct {
-	ID       uint64 `json:"ID,omitempty"`
-	UUID     string `json:"UUID"`
-	Mail     string `json:"mail"`
+	ID       uint64 `json:"-"`
+	UUID     string `json:"uuid,omitempty"`
+	Mail     string `json:"mail,omitempty"`
 	Password string `json:"password,omitempty"`
+
+	CreatedAt time.Time `json:"created_at,omitempty"`
+	UpdatedAt time.Time `json:"updated_at,omitempty"`
 }
 
 func (u *User) ValidateAll() error {

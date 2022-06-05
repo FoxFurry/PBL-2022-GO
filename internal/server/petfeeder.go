@@ -1,10 +1,20 @@
 package server
 
 import (
+	"net/http"
+
+	"github.com/FoxFurry/PBL-2022-GO/internal/httperr"
 	"github.com/FoxFurry/PBL-2022-GO/internal/service"
 	"github.com/FoxFurry/PBL-2022-GO/internal/store"
 	"github.com/FoxFurry/PBL-2022-GO/internal/util"
 	"github.com/gin-gonic/gin"
+)
+
+const (
+	authSchema  = "Bearer " // Space if required by auth header standard
+	uuidKey     = "uuid"
+	tokenIssuer = "petfeeder_dev"
+	tokenSecret = "5dd0bf305c1eb5b832dbc4169c84ba0aa51704da74b8d2e953dca7b276ee8b0c821e8a764f16fd183c50ca9d9b655cf6159564a1554da81ee16fe01866a462e225ad779b472a62b15d2861c54579875709da3e025e916ab3ac89b165359d0ac529e3739a513eb0de1a2350ab9f741"
 )
 
 type PetFeeder struct {
@@ -23,10 +33,11 @@ func New(datastore store.DB) (*PetFeeder, error) {
 	}
 
 	v1 := ginEngine.Group("/v1")
+	v1.Use(p.corsMiddleware)
 	{
 		user := v1.Group("/user")
 		{
-			user.POST("/create", p.CreateNewUser)   // /v1/user/create
+			user.POST("/register", p.RegisterUser)  // /v1/user/create
 			user.GET("/getbymail", p.GetUserByMail) // /v1/user/getbymail
 			user.POST("/login", p.LoginUser)        // /v1/user/login
 		}
@@ -45,3 +56,37 @@ func (p *PetFeeder) Run() {
 }
 
 // Add generic helper functions here
+
+func (p *PetFeeder) jwtMiddleware(c *gin.Context) {
+	authHeader := c.GetHeader("Authorization")
+
+	if len(authHeader) <= len(authSchema) {
+		httperr.Handle(c, httperr.New("missing or invalid JWT token", http.StatusUnauthorized))
+		return
+	}
+
+	token := authHeader[len(authSchema):]
+
+	uuid, err := p.jwt.ValidateToken(token, tokenIssuer, []byte(tokenSecret))
+	if err != nil {
+		httperr.Handle(c, httperr.WrapHttp(err, "could not validate JWT token", http.StatusUnauthorized))
+		return
+	}
+
+	c.Set(uuidKey, uuid)
+	c.Next()
+}
+
+func (p *PetFeeder) corsMiddleware(c *gin.Context) {
+	c.Header("Access-Control-Allow-Origin", "*")
+	c.Header("Access-Control-Allow-Credentials", "true")
+	c.Header("Access-Control-Allow-Headers", "Content-Type, Content-Length, Accept-Encoding, X-CSRF-Token, Authorization, accept, origin, Cache-Control, X-Requested-With")
+	c.Header("Access-Control-Allow-Methods", "POST,HEAD,PATCH, OPTIONS, GET, PUT")
+
+	if c.Request.Method == "OPTIONS" {
+		c.AbortWithStatus(204)
+		return
+	}
+
+	c.Next()
+}

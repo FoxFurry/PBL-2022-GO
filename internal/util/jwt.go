@@ -3,7 +3,14 @@ package util
 import (
 	"errors"
 	"fmt"
+
 	"github.com/golang-jwt/jwt"
+)
+
+const (
+	issuerKey = "iss"
+	uuidKey   = "uuid"
+	expKey    = "exp"
 )
 
 type JWTProvider interface {
@@ -20,9 +27,9 @@ func NewJWT() JWTProvider {
 
 func (j *jwtprovider) CreateSignedToken(UUID string, expDate int64, issuer string, key []byte) (string, error) {
 	claims := jwt.MapClaims{
-		"uuid": UUID,
-		"exp":  expDate,
-		"iss":  issuer,
+		uuidKey:   UUID,
+		expKey:    expDate,
+		issuerKey: issuer,
 	}
 
 	token := jwt.NewWithClaims(jwt.SigningMethodHS256, claims)
@@ -48,10 +55,10 @@ func (j *jwtprovider) ValidateToken(token, issuer string, key []byte) (string, e
 
 	var uuidInToken string
 	if claims, ok := parsedToken.Claims.(jwt.MapClaims); ok && parsedToken.Valid {
-		if claims["iss"] != issuer {
+		if claims[issuerKey] != issuer {
 			return "", errors.New("issuers mismatch")
 		}
-		uuidInToken, ok = claims["uuid"].(string)
+		uuidInToken, ok = claims[uuidKey].(string)
 		if !ok {
 			return "", errors.New("missing uuid claim")
 		}
