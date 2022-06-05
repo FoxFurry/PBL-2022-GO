@@ -46,7 +46,7 @@ func (d *db) GetAllPlansByOwnerID(ctx context.Context, ownerID uint64) ([]models
 func (d *db) GetPlanByUUID(ctx context.Context, planUUID string) (*models.Plan, error) {
 	var plan models.Plan
 
-	if err := d.sql.GetContext(ctx, &d, `SELECT * FROM plans WHERE uuid = ?`, planUUID); err != nil {
+	if err := d.sql.GetContext(ctx, &plan, `SELECT * FROM plans WHERE uuid = ?`, planUUID); err != nil {
 		return nil, err
 	}
 

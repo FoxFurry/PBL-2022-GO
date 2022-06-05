@@ -63,10 +63,11 @@ func initDB(d *db) {
 	}
 
 	cfg := mysql.Config{
-		User:   dbUser,
-		Passwd: dbPass,
-		Addr:   fmt.Sprintf("%s:%s", dbHost, dbPort),
-		DBName: dbName,
+		User:      dbUser,
+		Passwd:    dbPass,
+		Addr:      fmt.Sprintf("%s:%s", dbHost, dbPort),
+		DBName:    dbName,
+		ParseTime: true,
 	}
 
 	d.sql, err = sqlx.Connect("mysql", cfg.FormatDSN())

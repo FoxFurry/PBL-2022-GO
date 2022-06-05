@@ -37,6 +37,7 @@ type Service interface {
 	CreatePlan(ctx context.Context, plan models.Plan) (*models.Plan, error)
 	DeletePlan(ctx context.Context, planUUID string) error
 	GetAllPlansByOwner(ctx context.Context, ownerID uint64) ([]models.Plan, error)
+	GetPlanByUUID(ctx context.Context, planUUID string) (*models.Plan, error)
 }
 
 type service struct {

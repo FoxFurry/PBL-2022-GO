@@ -38,14 +38,28 @@ func New(datastore store.DB) (*PetFeeder, error) {
 	{
 		user := v1.Group("/user")
 		{
-			user.POST("/register", p.RegisterUser)  // /v1/user/create
-			user.GET("/getbymail", p.GetUserByMail) // /v1/user/getbymail
-			user.POST("/login", p.LoginUser)        // /v1/user/login
+			user.POST("/register", p.RegisterUser) // /v1/user/create
+			//user.GET("/getbymail", p.GetUserByMail) // /v1/user/getbymail
+			user.POST("/login", p.LoginUser) // /v1/user/login
+			user.GET("/devices", p.jwtMiddleware, p.GetDevicesForUser)
+			user.GET("/pets", p.jwtMiddleware, p.GetPetsByUser)
+			user.GET("/plans", p.jwtMiddleware, p.GetPlansByUser)
 		}
 
 		device := v1.Group("/device")
 		{
-			device.POST("/register") // /v1/device/register
+			device.POST("/", p.jwtMiddleware, p.RegisterDevice) // /v1/device/register
+			device.DELETE("/:deviceUUID", p.jwtMiddleware, p.DeleteDevice)
+		}
+		pet := v1.Group("/pet")
+		{
+			pet.POST("/", p.jwtMiddleware, p.RegisterPet)
+			pet.DELETE("/:petUUID", p.jwtMiddleware, p.DeletePet)
+		}
+		plan := v1.Group("/plan")
+		{
+			plan.POST("/", p.jwtMiddleware, p.CreatePlan)
+			plan.DELETE("/:planUUID", p.jwtMiddleware, p.DeletePlan)
 		}
 	}
 

@@ -16,8 +16,8 @@ type User struct {
 	Mail     string `json:"mail,omitempty"`
 	Password string `json:"password,omitempty"`
 
-	CreatedAt time.Time `json:"created_at,omitempty"`
-	UpdatedAt time.Time `json:"updated_at,omitempty"`
+	CreatedAt time.Time `json:"created_at,omitempty" db:"created_at"`
+	UpdatedAt time.Time `json:"updated_at,omitempty" db:"updated_at"`
 }
 
 func (u *User) ValidateAll() error {

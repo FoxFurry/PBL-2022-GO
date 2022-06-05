@@ -17,13 +17,21 @@ func (p *PetFeeder) RegisterPet(c *gin.Context) {
 
 	var pet models.Pet
 
-	if err := c.ShouldBindJSON(&p); err != nil {
+	if err := c.ShouldBindJSON(&pet); err != nil {
 		httperr.Handle(c, httperr.New(err.Error(), http.StatusBadRequest))
 		return
 	}
 
 	if pet.Name == "" {
 		httperr.Handle(c, httperr.New("missing pet name", http.StatusBadRequest))
+		return
+	} else if pet.PlanUUID == "" {
+		httperr.Handle(c, httperr.New("missing plan id", http.StatusBadRequest))
+		return
+	}
+
+	if _, err := p.service.GetPlanByUUID(c, pet.PlanUUID); err != nil {
+		httperr.Handle(c, httperr.New("specified plan not found", http.StatusBadRequest))
 		return
 	}
 
@@ -38,7 +46,7 @@ func (p *PetFeeder) RegisterPet(c *gin.Context) {
 	c.JSON(http.StatusOK, createdPet)
 }
 
-func (p *PetFeeder) GetAllPetsByOwner(c *gin.Context) {
+func (p *PetFeeder) GetPetsByUser(c *gin.Context) {
 	creator, err := p.getUserFromContext(c)
 	if err != nil {
 		httperr.Handle(c, err)
@@ -55,7 +63,7 @@ func (p *PetFeeder) GetAllPetsByOwner(c *gin.Context) {
 }
 
 func (p *PetFeeder) DeletePet(c *gin.Context) {
-	uuid := c.Param("uuid")
+	uuid := c.Param("petUUID")
 	if uuid == "" {
 		httperr.Handle(c, httperr.New("missing uuid parameter", http.StatusBadRequest))
 		return

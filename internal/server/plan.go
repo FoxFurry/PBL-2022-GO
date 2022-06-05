@@ -17,7 +17,7 @@ func (p *PetFeeder) CreatePlan(c *gin.Context) {
 
 	var plan models.Plan
 
-	if err := c.ShouldBindJSON(&p); err != nil {
+	if err := c.ShouldBindJSON(&plan); err != nil {
 		httperr.Handle(c, httperr.New(err.Error(), http.StatusBadRequest))
 		return
 	}
@@ -38,7 +38,7 @@ func (p *PetFeeder) CreatePlan(c *gin.Context) {
 	c.JSON(http.StatusOK, createdPlan)
 }
 
-func (p *PetFeeder) GetAllPlansByOwner(c *gin.Context) {
+func (p *PetFeeder) GetPlansByUser(c *gin.Context) {
 	creator, err := p.getUserFromContext(c)
 	if err != nil {
 		httperr.Handle(c, err)
@@ -55,7 +55,7 @@ func (p *PetFeeder) GetAllPlansByOwner(c *gin.Context) {
 }
 
 func (p *PetFeeder) DeletePlan(c *gin.Context) {
-	uuid := c.Param("uuid")
+	uuid := c.Param("planUUID")
 	if uuid == "" {
 		httperr.Handle(c, httperr.New("missing uuid parameter", http.StatusBadRequest))
 		return

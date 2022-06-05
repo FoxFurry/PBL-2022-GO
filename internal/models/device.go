@@ -12,6 +12,6 @@ type Device struct {
 	Location string `json:"location,omitempty"`
 	Address  string `json:"address,omitempty"`
 
-	CreatedAt time.Time `json:"created_at,omitempty"`
-	UpdatedAt time.Time `json:"updated_at,omitempty"`
+	CreatedAt time.Time `json:"created_at,omitempty" db:"created_at"`
+	UpdatedAt time.Time `json:"updated_at,omitempty" db:"updated_at"`
 }

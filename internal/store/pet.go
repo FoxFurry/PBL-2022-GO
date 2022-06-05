@@ -7,10 +7,11 @@ import (
 )
 
 func (d *db) CreatePet(ctx context.Context, pet models.Pet) error {
-	_, err := d.sql.ExecContext(ctx, `INSERT INTO pets (plan_id, uuid, name) VALUES (?, ?, ?)`,
-		pet.PlanID,
+	_, err := d.sql.ExecContext(ctx, `INSERT INTO pets (plan_uuid, uuid, name, owner_id) VALUES (?, ?, ?, ?)`,
+		pet.PlanUUID,
 		pet.UUID,
 		pet.Name,
+		pet.OwnerID,
 	)
 	return err
 }
@@ -36,7 +37,7 @@ func (d *db) GetPetsByOwnerID(ctx context.Context, ownerID uint64) ([]models.Pet
 			&petHolder.ID,
 			&petHolder.UUID,
 			&petHolder.OwnerID,
-			&petHolder.PlanID,
+			&petHolder.PlanUUID,
 			&petHolder.Name,
 			&petHolder.CreatedAt,
 			&petHolder.UpdatedAt,

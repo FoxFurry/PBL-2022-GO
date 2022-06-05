@@ -39,7 +39,7 @@ func (p *PetFeeder) RegisterDevice(c *gin.Context) {
 }
 
 func (p *PetFeeder) DeleteDevice(c *gin.Context) {
-	uuid := c.Param("uuid")
+	uuid := c.Param("deviceUUID")
 	if uuid == "" {
 		httperr.Handle(c, httperr.New("missing uuid parameter", http.StatusBadRequest))
 		return
@@ -53,21 +53,14 @@ func (p *PetFeeder) DeleteDevice(c *gin.Context) {
 	c.Status(http.StatusOK)
 }
 
-func (p *PetFeeder) GetDevicesByOwnerUUID(c *gin.Context) {
-	uuid := c.Param("uuid")
-
-	if uuid == "" {
-		httperr.Handle(c, httperr.New("missing uuid parameter", http.StatusBadRequest))
-		return
-	}
-
-	user, err := p.service.GetUserByUUID(c, uuid)
+func (p *PetFeeder) GetDevicesForUser(c *gin.Context) {
+	creator, err := p.getUserFromContext(c)
 	if err != nil {
-		httperr.Handle(c, httperr.Wrap(err, "could not get user"))
+		httperr.Handle(c, err)
 		return
 	}
 
-	devices, err := p.service.GetAllDevicesByOwner(c, user.ID)
+	devices, err := p.service.GetAllDevicesByOwner(c, creator.ID)
 	if err != nil {
 		httperr.Handle(c, httperr.Wrap(err, "could not get devices"))
 		return

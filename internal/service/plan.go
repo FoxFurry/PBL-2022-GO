@@ -34,3 +34,12 @@ func (p *service) GetAllPlansByOwner(ctx context.Context, ownerID uint64) ([]mod
 
 	return plans, nil
 }
+
+func (p *service) GetPlanByUUID(ctx context.Context, planUUID string) (*models.Plan, error) {
+	plan, err := p.db.GetPlanByUUID(ctx, planUUID)
+	if err != nil {
+		return nil, handleDBError(err, "could not get plan")
+	}
+
+	return plan, nil
+}
